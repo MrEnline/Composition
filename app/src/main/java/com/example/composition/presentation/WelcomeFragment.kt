@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.composition.R
 import com.example.composition.databinding.FragmentWelcomeBinding
+import com.example.composition.presentation.ChooseLevelFragment
 import java.lang.RuntimeException
 
 class WelcomeFragment : Fragment() {
@@ -32,12 +33,19 @@ class WelcomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.buttonUnderstand.setOnClickListener {
-
+            launchChooseLevelFragment()
         }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         _binding = null
+    }
+
+    fun launchChooseLevelFragment() {
+        requireActivity().supportFragmentManager.beginTransaction()
+            .replace(R.id.main_container, ChooseLevelFragment.newInstanse())
+            .addToBackStack(ChooseLevelFragment.NAME)   //добавим в бэкстэк фрагмент с заданным именетм, который открываем, для того чтобы вернуться к нему
+            .commit()
     }
 }
