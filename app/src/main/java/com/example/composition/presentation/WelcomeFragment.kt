@@ -6,13 +6,38 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.composition.R
+import com.example.composition.databinding.FragmentWelcomeBinding
+import java.lang.RuntimeException
 
 class WelcomeFragment : Fragment() {
+
+    //т.к. объект binding можно использовать в методе onDestroyView, то для этого создают
+    //другую переменную _binding, которой присваивается ссылка на созданную View и затем
+    //возвращается через get()
+    //но управление уже идет через binding
+    //затем она обнуляется в методе onDestroy()
+    private var _binding: FragmentWelcomeBinding? = null
+    private val binding: FragmentWelcomeBinding
+        get() = _binding ?: throw RuntimeException("FragmentWelcomBinding = null")
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_welcome, container, false)
+    ): View {
+        //создаем класс View, который в себе будет содержать ссылки на элементы в макете
+        _binding = FragmentWelcomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.buttonUnderstand.setOnClickListener {
+
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
     }
 }
