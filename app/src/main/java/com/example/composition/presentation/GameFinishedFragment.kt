@@ -36,6 +36,9 @@ class GameFinishedFragment : Fragment() {
         //viewLifecycleOwner нужен для того, чтобы слушатель удалялся при уничтожении фрагмента и
         //в следствие чего не было бы краша или утечки памяти
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+        binding.buttonRetry.setOnClickListener {
+            retryGame()
+        }
     }
 
     override fun onCreateView(
@@ -52,7 +55,9 @@ class GameFinishedFragment : Fragment() {
     }
 
     private fun parseArgs() {
-        gameResult = requireArguments().getSerializable(KEY_GAME_RESULT) as GameResult
+        requireArguments().getParcelable<GameResult>(KEY_GAME_RESULT)?.let {
+            gameResult = it
+        }
     }
 
     //переходим к тому фрагменту, который нам нужен по имени
@@ -72,7 +77,7 @@ class GameFinishedFragment : Fragment() {
         fun newInstanse(gameResult: GameResult): GameFinishedFragment {
             return GameFinishedFragment().apply {
                 arguments = Bundle().apply {
-                    putSerializable(KEY_GAME_RESULT, gameResult)
+                    putParcelable(KEY_GAME_RESULT, gameResult)
                 }
             }
         }
