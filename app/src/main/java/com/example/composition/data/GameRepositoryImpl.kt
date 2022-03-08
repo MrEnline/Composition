@@ -13,6 +13,7 @@ object GameRepositoryImpl: GameRepository {
     private const val MIN_SUM_VALUE = 2
     private const val MIN_ANSWER_VALUE = 1
 
+
     override fun generateQuestion(maxSumValue: Int, countOfOptions: Int): Question {
         val sum = Random.nextInt(MIN_SUM_VALUE, maxSumValue + 1)
         val visibleNumber = Random.nextInt(MIN_ANSWER_VALUE, sum)
@@ -20,10 +21,8 @@ object GameRepositoryImpl: GameRepository {
         var options = HashSet<Int>()
         options.add(rightAnswer)
         //countOfOptions - количество вариантов, которые видит пользователь
-        //нижняя граница значения
-        val from = max(rightAnswer - countOfOptions, MIN_ANSWER_VALUE)
-        //верхняя граница значения
-        val to = min(maxSumValue, rightAnswer + countOfOptions)
+        val from = max(rightAnswer - countOfOptions, MIN_ANSWER_VALUE)         //нижняя граница значения
+        val to = min(maxSumValue, rightAnswer + countOfOptions)                  //верхняя граница значения
         //генерация чисел близких к правильному ответу и добавление в множество
         while (options.size < countOfOptions) {
             options.add(Random.nextInt(from, to))
