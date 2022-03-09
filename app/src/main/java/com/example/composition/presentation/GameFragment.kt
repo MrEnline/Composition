@@ -35,6 +35,11 @@ class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentGameBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         buttons = arrayOf(
             binding.tvOption1,
             binding.tvOption2,
@@ -43,11 +48,6 @@ class GameFragment : Fragment() {
             binding.tvOption5,
             binding.tvOption6
         )
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
         gameViewModel.getGameSettings(level)
         gameViewModel.question.observe(viewLifecycleOwner) {
@@ -58,6 +58,7 @@ class GameFragment : Fragment() {
                 buttons?.get(i)?.setText(it.options[i+1])
             }
         }
+        gameViewModel.generateQuestion()
         addClickListeners()
 //        binding.tvOption1.setOnClickListener {
 //            launchGameFinishedFragment(
