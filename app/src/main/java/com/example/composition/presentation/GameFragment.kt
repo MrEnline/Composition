@@ -1,5 +1,6 @@
 package com.example.composition.presentation
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -48,28 +49,18 @@ class GameFragment : Fragment() {
             binding.tvOption5,
             binding.tvOption6
         )
+        length = buttons?.size!!
         gameViewModel = ViewModelProvider(this)[GameViewModel::class.java]
         gameViewModel.getGameSettings(level)
         gameViewModel.question.observe(viewLifecycleOwner) {
-            binding.tvSum.setText(it.sum)
-            binding.tvLeftNumber.setText(it.visibleNumber)
-            length = buttons?.size?.minus(1)!!
-            for(i in 0..length!!) {
-                buttons?.get(i)?.setText(it.options[i+1])
+            binding.tvSum.text = it.sum.toString()
+            binding.tvLeftNumber.text = it.visibleNumber.toString()
+            for(i in 0 until length) {
+                buttons?.get(i)?.text = it.options[i].toString()
             }
         }
-        gameViewModel.generateQuestion()
         addClickListeners()
-//        binding.tvOption1.setOnClickListener {
-//            launchGameFinishedFragment(
-//                GameResult(true,
-//                    0,
-//                       0,
-//                        GameSettings(0, 0, 0, 0)
-//                )
-//            )
-//        }
-
+        gameViewModel.generateQuestion()
     }
 
     override fun onDestroy() {
@@ -78,7 +69,7 @@ class GameFragment : Fragment() {
     }
 
    fun addClickListeners() {
-       for (i in 0..length) {
+       for (i in 0 until length) {
            buttons?.get(i)?.setOnClickListener {
                gameViewModel.generateQuestion()
            }

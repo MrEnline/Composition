@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.example.composition.data.GameRepositoryImpl
+import com.example.composition.domain.entity.GameResult
 import com.example.composition.domain.entity.GameSettings
 import com.example.composition.domain.entity.Level
 import com.example.composition.domain.entity.Question
@@ -18,19 +19,34 @@ class GameViewModel: ViewModel() {
 
     private val _question = MutableLiveData<Question>()
     val question: LiveData<Question>
-        get() = question
+        get() = _question
 
-//    private val _gameSettings = MutableLiveData<GameSettings>()
-//    val gameSettings: LiveData<GameSettings>
-//        get() = _gameSettings
+    private val _gameResult = MutableLiveData<GameResult>()
+    val gameResult: LiveData<GameResult>
+        get() = _gameResult
+
     private lateinit var gameSettings: GameSettings
+    private var countOfRightAnswers: Int = 0
+    private var countOfQuestions: Int = 0
 
-    fun generateQuestion() {
+    fun generateQuestion(valButton: String = "") {
         _question.value = generateQuestionUseCase(gameSettings.maxSumValue)
+        countOfQuestions++
+        if (!valButton.isBlank()) {
+            checkRightAnswer(valButton.toInt())
+        }
+    }
+
+    fun checkRightAnswer(valAnswer: Int) {
+        val rightAnswer = _question.value?.sum!! - _question.value?.visibleNumber!!
+        if (rightAnswer == valAnswer) {
+            countOfRightAnswers++
+        }
+        _gameResult.value.countOfQuestions = countOfQuestions
     }
 
     fun getGameSettings(level: Level) {
         gameSettings = getGameSettingsUseCase(level)
+        _gameResult.value = GameResult(false, countOfRightAnswers, countOfQuestions, gameSettings)
     }
-
 }
