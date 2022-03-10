@@ -2,6 +2,7 @@ package com.example.composition.presentation
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -58,6 +59,14 @@ class GameFragment : Fragment() {
             for(i in 0 until length) {
                 buttons?.get(i)?.text = it.options[i].toString()
             }
+            Log.d("Question", "true")
+        }
+        gameViewModel.gameResult.observe(viewLifecycleOwner) {
+            Log.d("GameResult", "true")
+            val result = getString(R.string.progress_answers,
+                            it.countOfRightAnswers.toString(),
+                            it.gameSettings.minCountOfRightAnswers.toString());
+            binding.tvAnswersProgress.text = result
         }
         addClickListeners()
         gameViewModel.generateQuestion()
@@ -71,7 +80,8 @@ class GameFragment : Fragment() {
    fun addClickListeners() {
        for (i in 0 until length) {
            buttons?.get(i)?.setOnClickListener {
-               gameViewModel.generateQuestion()
+               val tmp = buttons?.get(i)?.text as String
+               gameViewModel.generateQuestion(tmp)
            }
        }
    }

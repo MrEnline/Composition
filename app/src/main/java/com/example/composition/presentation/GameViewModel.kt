@@ -30,11 +30,11 @@ class GameViewModel: ViewModel() {
     private var countOfQuestions: Int = 0
 
     fun generateQuestion(valButton: String = "") {
-        _question.value = generateQuestionUseCase(gameSettings.maxSumValue)
         countOfQuestions++
         if (!valButton.isBlank()) {
             checkRightAnswer(valButton.toInt())
         }
+        _question.value = generateQuestionUseCase(gameSettings.maxSumValue)
     }
 
     fun checkRightAnswer(valAnswer: Int) {
@@ -42,7 +42,7 @@ class GameViewModel: ViewModel() {
         if (rightAnswer == valAnswer) {
             countOfRightAnswers++
         }
-        _gameResult.value.countOfQuestions = countOfQuestions
+        _gameResult.value = GameResult(false, countOfRightAnswers, countOfQuestions, gameSettings)
     }
 
     fun getGameSettings(level: Level) {
