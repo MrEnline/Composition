@@ -9,5 +9,6 @@ class GameResult(
     val winner: Boolean,
     var countOfRightAnswers: Int,
     var countOfQuestions: Int,
+    var percentOfRightAnswer: Int,
     val gameSettings: GameSettings
 ): Parcelable
