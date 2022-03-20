@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
+import androidx.navigation.fragment.findNavController
 import com.example.composition.R
 import com.example.composition.databinding.FragmentGameFinishedBinding
 import com.example.composition.domain.entity.GameResult
@@ -76,12 +77,12 @@ class GameFinishedFragment : Fragment() {
 
     //Вариант Сумина
     private fun setupClickListeners() {
-        val callback = object : OnBackPressedCallback(true) {
-            override fun handleOnBackPressed() {
-                retryGame()
-            }
-        }
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+//        val callback = object : OnBackPressedCallback(true) {
+//            override fun handleOnBackPressed() {
+//                retryGame()
+//            }
+//        }
+//        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
         binding.buttonRetry.setOnClickListener {
             retryGame()
         }
@@ -142,13 +143,15 @@ class GameFinishedFragment : Fragment() {
         //в данном случае мы будем переходить в фрагмент с игрой и сразу же удалять его с помощью
         //флага FragmentManager.POP_BACK_STACK_INCLUSIVE, для того, чтобы перед нами появился
         //фрагмент, который следует перед GameFragment.NAME
-        requireActivity().supportFragmentManager
-                        .popBackStack(GameFragment.NAME,
-                                     FragmentManager.POP_BACK_STACK_INCLUSIVE)
+//        requireActivity().supportFragmentManager
+//                        .popBackStack(GameFragment.NAME,
+//                                     FragmentManager.POP_BACK_STACK_INCLUSIVE)
+        //реализация с помощью библиотеки jetpacknavigation
+        findNavController().popBackStack()
     }
 
     companion object {
-        private const val KEY_GAME_RESULT = "key_game_result"
+        const val KEY_GAME_RESULT = "key_game_result"
 
         fun newInstanse(gameResult: GameResult): GameFinishedFragment {
             return GameFinishedFragment().apply {
