@@ -53,10 +53,10 @@ class ChooseLevelFragment : Fragment() {
 //            .replace(R.id.main_container, GameFragment.newInstanse(level))
 //            .addToBackStack(GameFragment.NAME)
 //            .commit()
-        val args = Bundle().apply {
-            putParcelable(GameFragment.KEY_LEVEL, level)
-        }
-        findNavController().navigate(R.id.action_chooseLevelFragment2_to_gameFragment, args)
+        //передача аргументов с помощью библиотеки safeArgs
+        findNavController().navigate(
+            ChooseLevelFragmentDirections.actionChooseLevelFragment2ToGameFragment(level)
+        )
     }
 
     companion object {
